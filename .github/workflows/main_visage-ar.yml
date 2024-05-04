@@ -26,13 +26,12 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-
+      
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      
-
+        
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
@@ -50,6 +49,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -60,9 +61,18 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D1BD0F830BF64F809308040AE1C913A4 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_57D80CEAD464412B869F42182E4B616F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_31B21079189F493388BCEE14EB0F7DB4 }}
+
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'visage-ar3'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_504BD28246454C35975ED813F45BF793 }}
+          app-name: 'visage-ar'
+          slot-name: 'Production'
+          
