@@ -1,8 +1,7 @@
 Flask==3.0.1
 pillow==10.2.0
-face-recognition==1.3.0
 imutils==0.5.4
 opencv-python==4.9.0.80
+pymongo==4.6.2
 numpy==1.26.3
-bson==0.5.10
 gunicorn==22.0.0
