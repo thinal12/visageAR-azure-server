@@ -23,7 +23,7 @@ jobs:
           python-version: '3.10'
 
       - name: Use pre-installed virtual environment
-        run: source $GITHUB_WORKSPACE/venv/bin/activate
+        run: source $GITHUB_WORKSPACE/venv/Scripts/activate
 
   deploy:
     runs-on: ubuntu-latest
