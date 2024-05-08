@@ -21,14 +21,15 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: '3.10'
-
-      # You don't need to create and start the virtual environment again
-      # Instead, you'll activate the existing one
-
-      - name: Activate existing virtual environment
-        run: source $GITHUB_WORKSPACE/venv/Scripts/activate
+          
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source $GITHUB_WORKSPACE/venv/Scripts/activate
       
-      # Skip the installation step since packages are already installed in the venv
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -36,7 +37,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: python-app
-          path: venv
+          path: |
+            .
+            !venv/
           
   deploy:
     runs-on: ubuntu-latest
@@ -53,7 +56,10 @@ jobs:
         with:
           name: python-app
           path: .
-      
+          
+      - name: Use pre-installed virtual environment
+        run: source $GITHUB_WORKSPACE/venv/Scripts/activate
+        
       - name: Login to Azure
         uses: azure/login@v1
         with:
