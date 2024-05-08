@@ -1,5 +1,7 @@
 Flask
 pillow
+cmake
+dlib
 imutils
 opencv-python
 face-recognition
