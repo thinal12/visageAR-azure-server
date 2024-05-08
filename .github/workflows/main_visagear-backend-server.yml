@@ -57,8 +57,6 @@ jobs:
           name: python-app
           path: .
           
-      - name: Use pre-installed virtual environment
-        run: source $GITHUB_WORKSPACE/venv/Scripts/activate
         
       - name: Login to Azure
         uses: azure/login@v1
