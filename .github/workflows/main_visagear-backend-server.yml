@@ -26,7 +26,7 @@ jobs:
       # Instead, you'll activate the existing one
 
       - name: Activate existing virtual environment
-        run: source venv/bin/activate
+        run: source $GITHUB_WORKSPACE/venv/Scripts/activate
       
       # Skip the installation step since packages are already installed in the venv
 
