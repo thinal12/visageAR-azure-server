@@ -24,6 +24,14 @@ jobs:
 
       - name: Use pre-installed virtual environment
         run: source $GITHUB_WORKSPACE/venv/Scripts/activate
+        
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: |
+            .
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -33,14 +41,23 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
+      
 
     steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+          path: .
+          
       - name: Login to Azure
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B10D55602D2F400D9074847E58D8ACC5 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6CC029B696CC4156AF04A304C0468B18 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A099990517EF4C9F98DD00FA98E2633C }}
+      
+      
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
